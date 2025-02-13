@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from contact.forms import RegisterForm
+from django.contrib import messages
 
 def register(request):
     form = RegisterForm()
+    
+    messages.info(request, 'mensagem programada')
 
     if request.method == 'POST':
         form = RegisterForm(request.POST)
