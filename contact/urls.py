@@ -13,4 +13,7 @@ urlpatterns = [
 
     #user
     path('user/create/', views.register, name='register'),    
+    path('user/login/', views.login_view, name='login'),    
+    path('user/deslogar/', views.logout, name='logout'),    
+    path('user/update/', views.user_update, name='user_update'),    
 ]

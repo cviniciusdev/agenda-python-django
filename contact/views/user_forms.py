@@ -1,17 +1,18 @@
-from django.shortcuts import render
-from contact.forms import RegisterForm
-from django.contrib import messages
+from django.shortcuts import redirect, render
+from contact.forms import RegisterForm, RegisterUpdateForm
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib import auth, messages
 
 def register(request):
     form = RegisterForm()
     
-    messages.info(request, 'mensagem programada')
-
     if request.method == 'POST':
         form = RegisterForm(request.POST)
 
         if form.is_valid():
-            form.save()
+            form.save()            
+            messages.success(request, 'Cadastro realizado com sucesso!')
+            return redirect('contact:index')
 
     # Senha carlos.maria = '#Defe123'
     return render(
@@ -21,3 +22,44 @@ def register(request):
             'form': form,
         }
     )
+
+def login_view(request):
+    # Senha carlos.maria = '#Defe123'
+    form = AuthenticationForm(request)
+
+    if request.method == 'POST':
+
+        form = AuthenticationForm(request, request.POST)
+
+        if form.is_valid():
+            user = form.get_user()
+            auth.login(request, user)
+            messages.success(request, 'Login realizado com sucesso')
+            return redirect('contact:index')
+        
+        messages.error(request, 'Login inválido')
+
+
+    return render(
+        request,
+        'contact/login.html',
+        {
+            'form': form,
+        }
+    )
+
+def logout(request):
+    auth.logout(request)
+    return redirect('contact:login')
+
+
+def user_update(request):
+    form = RegisterUpdateForm()
+
+    return render(
+        request,
+        'contact/register.html',
+        {
+            'form': form,
+        }
+    )    
